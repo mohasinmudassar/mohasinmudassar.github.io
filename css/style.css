@@ -28,6 +28,11 @@ html{
     box-sizing: border-box;
     -webkit-font-smoothing:antialiased;
 }
+
+.size {
+    width: 200px;
+    height: 121px;
+  }
 header{
     background: var(--dark);
     clip-path:polygon(0 0, 100% 0, 100% 100%, 70% 87%, 0 100%);
