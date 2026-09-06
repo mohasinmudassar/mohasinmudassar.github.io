@@ -59,6 +59,15 @@ export const ArrowIcon = ({ size = 16 }: P) => (
   </svg>
 );
 
+export const GameIcon = ({ size = 18 }: P) => (
+  <svg {...base(size)}>
+    <rect x="2.5" y="8" width="19" height="9.5" rx="3.5" />
+    <path d="M7 10.5v4.5M4.9 12.75h4.2" />
+    <circle cx="16" cy="11.5" r="1" fill="currentColor" stroke="none" />
+    <circle cx="18.5" cy="13.8" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+
 export const MenuIcon = ({ size = 20 }: P) => (
   <svg {...base(size)}>
     <path d="M4 7h16M4 12h16M4 17h16" />

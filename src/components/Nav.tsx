@@ -1,5 +1,6 @@
 import { nav, site } from "@/data/content";
 import { DownloadIcon, MenuIcon, CloseIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
+import GameLauncher from "./GameLauncher";
 
 export default function Nav() {
   return (
@@ -18,6 +19,7 @@ export default function Nav() {
                 {n.label}
               </a>
             ))}
+            <GameLauncher className="game-toggle" />
             <a className="btn btn-resume" href={site.resume} download style={{ marginLeft: 10 }}>
               <DownloadIcon /> Résumé
             </a>
@@ -38,6 +40,7 @@ export default function Nav() {
             {n.label}
           </a>
         ))}
+        <GameLauncher className="game-toggle game-toggle-drawer" label="Play a game" />
         <a className="btn" href={site.resume} download style={{ marginTop: 18, justifyContent: "center" }}>
           <DownloadIcon /> Download résumé
         </a>

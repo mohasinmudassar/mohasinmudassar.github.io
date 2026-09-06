@@ -594,6 +594,101 @@ section { padding-block: 88px; }
 }
 .diagram-modal-close:hover { color: var(--accent); border-color: var(--accent-line); }
 
+/* ------------------------------ game toggle ------------------------------ */
+
+.game-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--txt-dim);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s var(--ease);
+}
+.game-toggle:hover { color: var(--accent); border-color: var(--accent-line); background: rgba(94, 234, 212, 0.07); transform: translateY(-2px); }
+.game-toggle-drawer {
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  padding: 12px 0;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--txt);
+}
+.game-toggle-drawer:hover { background: none; transform: none; }
+
+/* ---------------------------- DevOps Invaders ----------------------------- */
+
+.invaders-card { width: min(480px, 100%); padding: 32px 24px 26px; }
+.invaders-title {
+  margin: 0 0 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(94, 234, 212, 0.45);
+}
+.invaders-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--txt-dim);
+}
+.invaders-hint { color: var(--txt-faint); }
+.invaders-screen {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(94, 234, 212, 0.55);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.22), 0 0 26px rgba(94, 234, 212, 0.22), inset 0 0 30px rgba(0, 0, 0, 0.45);
+}
+.invaders-screen canvas { display: block; width: 100%; height: auto; aspect-ratio: 440 / 300; }
+.invaders-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode: multiply;
+}
+.invaders-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(5, 7, 15, 0.88);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+}
+.invaders-overlay p { margin: 0; }
+.invaders-overlay p:first-child { font-size: 17px; font-weight: 700; letter-spacing: 0.05em; }
+.invaders-sub { font-size: 12px; color: var(--txt-dim); }
+.invaders-win p:first-child { color: var(--accent); text-shadow: 0 0 14px rgba(94, 234, 212, 0.6); }
+.invaders-lose p:first-child { color: #ff8a3d; text-shadow: 0 0 14px rgba(255, 138, 61, 0.55); }
+@media (max-width: 520px) {
+  .invaders-card { padding: 26px 16px 20px; }
+  .invaders-hud { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
 .repo-cta {
   display: flex;
   align-items: center;
