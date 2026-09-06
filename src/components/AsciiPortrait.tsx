@@ -287,16 +287,58 @@ export default function AsciiPortrait({ src, alt }: { src: string; alt: string }
 
   return (
     <div className="portrait" ref={wrapRef}>
-      <div className="portrait-frame">
-        <span className="corner corner-tl" aria-hidden="true" />
-        <span className="corner corner-tr" aria-hidden="true" />
-        <span className="corner corner-bl" aria-hidden="true" />
-        <span className="corner corner-br" aria-hidden="true" />
-        <canvas ref={canvasRef} role="img" aria-label={alt} />
-      </div>
+      <canvas ref={canvasRef} role="img" aria-label={alt} />
       <p className="portrait-caption">
-        <b>&gt; whoami</b> — Mohasin Mudassar
+        <b>&gt; whoami</b> — <TypedName />
       </p>
     </div>
+  );
+}
+
+const NAME = "Mohasin Mudassar";
+
+function TypedName() {
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      timer = setTimeout(() => setTyped(NAME), 0);
+      return () => clearTimeout(timer);
+    }
+    let i = 0;
+    let deleting = false;
+
+    const tick = () => {
+      if (!deleting) {
+        i++;
+        setTyped(NAME.slice(0, i));
+        if (i >= NAME.length) {
+          deleting = true;
+          timer = setTimeout(tick, 2200);
+          return;
+        }
+      } else {
+        i--;
+        setTyped(NAME.slice(0, i));
+        if (i <= 0) {
+          deleting = false;
+          timer = setTimeout(tick, 500);
+          return;
+        }
+      }
+      timer = setTimeout(tick, deleting ? 28 : 60);
+    };
+
+    timer = setTimeout(tick, 700);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <span className="tw">
+      {typed}
+      <span className="caret" />
+    </span>
   );
 }

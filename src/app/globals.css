@@ -289,53 +289,29 @@ section { padding-block: 88px; }
 }
 .hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
 @media (min-width: 981px) {
-  .hero-grid { grid-template-columns: 1.3fr 320px; gap: 56px; }
+  .hero-grid { grid-template-columns: 1fr 440px; gap: 40px; }
 }
 
-/* Portrait: ASCII/dot-field rendering with cursor-reactive flow, see AsciiPortrait.tsx */
-.portrait { width: min(100%, 300px); margin-inline: auto; }
-.portrait-frame {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background: linear-gradient(160deg, var(--card-hi), var(--card));
-  isolation: isolate;
-  transition: transform 0.3s var(--ease), border-color 0.3s;
-}
-.portrait:hover .portrait-frame { transform: translateY(-3px); border-color: var(--accent-line); }
-.portrait-frame::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: -1;
-  border-radius: 21px;
-  background: radial-gradient(120% 120% at 25% 0%, rgba(94, 234, 212, 0.2), transparent 62%);
-  pointer-events: none;
-}
+/* Portrait: ASCII/dot-field rendering with cursor-reactive flow, see AsciiPortrait.tsx.
+   No card/border around it on purpose — it floats directly on the page. */
+.portrait { width: min(100%, 440px); margin-inline: auto; }
 .portrait canvas {
   display: block;
   width: 100%;
-  height: 100%;
-  border-radius: 19px;
-  background: var(--bg-soft);
+  aspect-ratio: 1 / 1;
   cursor: crosshair;
   touch-action: none;
 }
-.portrait .corner { position: absolute; width: 16px; height: 16px; pointer-events: none; }
-.portrait .corner-tl { top: 6px; left: 6px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
-.portrait .corner-tr { top: 6px; right: 6px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
-.portrait .corner-bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
-.portrait .corner-br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
 .portrait-caption {
-  margin-top: 16px;
+  margin-top: 18px;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--txt-faint);
 }
 .portrait-caption b { color: var(--accent); font-weight: 600; }
-@media (max-width: 980px) { .portrait { width: min(60vw, 240px); } }
+.portrait-caption .tw { color: var(--accent); font-weight: 600; }
+@media (max-width: 980px) { .portrait { width: min(82vw, 360px); } }
 .kicker {
   font-family: var(--font-mono);
   font-size: clamp(13px, 2.2vw, 15px);
