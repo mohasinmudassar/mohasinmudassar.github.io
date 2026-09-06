@@ -292,8 +292,8 @@ section { padding-block: 88px; }
   .hero-grid { grid-template-columns: 1.3fr 320px; gap: 56px; }
 }
 
-/* Portrait: pixel-dissolve reveal + duotone framing, see PixelPortrait.tsx */
-.portrait { width: min(100%, 300px); margin-inline: auto; cursor: pointer; }
+/* Portrait: ASCII/dot-field rendering with cursor-reactive flow, see AsciiPortrait.tsx */
+.portrait { width: min(100%, 300px); margin-inline: auto; }
 .portrait-frame {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -320,9 +320,8 @@ section { padding-block: 88px; }
   height: 100%;
   border-radius: 12px;
   background: var(--bg-soft);
-}
-.portrait-duotone {
-  filter: grayscale(0.85) brightness(0.94) contrast(1.1) sepia(0.35) hue-rotate(150deg) saturate(2.1);
+  cursor: crosshair;
+  touch-action: pan-y;
 }
 .portrait .corner { position: absolute; width: 16px; height: 16px; pointer-events: none; }
 .portrait .corner-tl { top: 6px; left: 6px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }

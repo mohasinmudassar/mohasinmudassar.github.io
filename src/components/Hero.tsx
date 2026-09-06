@@ -1,6 +1,6 @@
 import { site, stats, typewriter } from "@/data/content";
 import { ArrowIcon, DownloadIcon } from "./Icons";
-import PixelPortrait from "./PixelPortrait";
+import AsciiPortrait from "./AsciiPortrait";
 
 export default function Hero() {
   return (
@@ -43,7 +43,7 @@ export default function Hero() {
           </div>
 
           <div className="reveal">
-            <PixelPortrait src="/portrait.jpg" alt={`${site.name} — ${site.role}`} />
+            <AsciiPortrait src="/portrait.png" alt={`${site.name} — ${site.role}`} />
           </div>
         </div>
 
