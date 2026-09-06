@@ -26,7 +26,7 @@ export const typewriter = [
 export const stats = [
   { value: "3+", label: "years in cloud & DevOps" },
   { value: "10+", label: "environments standardised" },
-  { value: "35%", label: "faster release cycles" },
+  { value: "35%", label: "shorter release cycles" },
   { value: "25–30%", label: "AWS cost reduction" },
 ];
 
@@ -69,13 +69,9 @@ export const jobs: Job[] = [
     stack: ["AWS", "Azure", "Terraform", "Kubernetes", "Argo CD", "Datadog", "Keycloak"],
     bullets: [
       "Standardised AWS and Azure infrastructure with reusable Terraform modules for EC2, VPC, EKS and AKS across 10+ environments, cutting environment setup from hours to minutes.",
-      "Designed and shipped containerised applications on Kubernetes using rolling and blue-green deployments, improving release reliability across production.",
       "Accelerated delivery with CI/CD automation in GitHub Actions, Jenkins and GitOps workflows on Argo CD — 35% shorter release cycles across 8+ environments.",
-      "Worked with 5+ customers to gather requirements and design scalable AWS and Azure architectures for production platforms.",
       "Built observability with Datadog and Grafana, reducing detection time by 40% and MTTR by 25% through custom alerting and dashboards.",
-      "Implemented least-privilege IAM and Keycloak-based SSO across 6+ applications, tightening platform security and access governance.",
       "Investigated 15+ production incidents across the deployment and infrastructure layers, driving RCA, mitigation and long-term reliability fixes.",
-      "Wrote operational runbooks, RCA reports and technical guides that improved on-call readiness and knowledge sharing.",
     ],
   },
   {
@@ -124,11 +120,11 @@ export const projects: Project[] = [
     title: "Kubernetes GitOps Platform on AWS EKS",
     tagline: "Terraform · Argo CD · Ingress NGINX",
     problem:
-      "Spinning up a production-shaped Kubernetes environment took hours of manual clicking, and nobody could tell from Git what was actually running in the cluster.",
+      "I took AWS's open-source retail-store sample app — a realistic multi-service workload — as the payload and built the platform around it: the kind of environment that normally takes hours of manual console work to stand up, with no way to tell from Git what was actually running in the cluster.",
     bullets: [
-      "Provisioned an AWS EKS cluster entirely in Terraform, dropping provisioning time from hours to under 30 minutes.",
-      "Moved deployments to a GitOps model with Argo CD, so the repo is the source of truth and rollbacks are a git revert.",
-      "Configured Ingress NGINX and AWS load balancing for high availability across 3+ services, holding 99% uptime.",
+      "My contribution was the infrastructure layer, not the sample app's services: the EKS cluster, networking and IAM are entirely mine, provisioned in Terraform and dropping environment setup from hours to under 30 minutes.",
+      "Moved deployments to a GitOps model with Argo CD, so the Git repo is the source of truth and a rollback is a git revert, not a manual kubectl fix under pressure.",
+      "Configured Ingress NGINX and an AWS load balancer in front of the app's services, with health checks wired up so a failed pod doesn't take traffic down with it.",
     ],
     stack: ["Terraform", "AWS EKS", "Argo CD", "Ingress NGINX", "Kubernetes", "GitHub Actions"],
     repo: "https://github.com/mohasinmudassar/retail-store-app-deployment",
@@ -140,11 +136,11 @@ export const projects: Project[] = [
     problem:
       "Idle EC2 instances, orphaned load balancers and forgotten NAT Gateways were quietly burning budget every month, and nobody owned finding them.",
     bullets: [
-      "Built a serverless Python + Lambda service that scans accounts on a schedule and flags or cleans idle EC2, ELB and NAT Gateway resources.",
-      "Delivered a 25–30% reduction in monthly cloud spend while tightening tagging policy and resource ownership.",
-      "Reports land in CloudWatch and notifications, so cost hygiene became a recurring signal instead of a quarterly surprise.",
+      "Built a serverless Python + Lambda service that scans accounts on a schedule for idle EC2, unattached EBS volumes, target-less load balancers and unused NAT Gateways.",
+      "Resources are flagged and reported via SNS first, not deleted outright — teams get a grace period to tag anything that should be excluded before cleanup runs.",
+      "Paired with a tagging standard (owner, team, environment) for accountability, this cut monthly AWS spend by roughly 25–30%, measured through AWS Cost Explorer across several billing cycles.",
     ],
-    stack: ["Python", "AWS Lambda", "CloudWatch", "Boto3", "IAM", "EventBridge"],
+    stack: ["Python", "AWS Lambda", "CloudWatch", "Boto3", "IAM", "EventBridge", "SNS"],
     repo: "https://github.com/mohasinmudassar/Automated-AWS-Cost-Optimization-System",
     diagram: "costopt",
   },
@@ -205,7 +201,7 @@ export const certifications = [
     name: "AWS Certified Solutions Architect – Associate",
     issuer: "Amazon Web Services",
     date: "March 2026",
-    url: "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+    url: "https://www.credly.com/badges/b7b3f541-b2f5-40f9-bdf4-782ab35a58be/public_url",
   },
 ];
 

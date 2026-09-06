@@ -15,19 +15,21 @@ const accentNode = {
 
 const title = {
   fontFamily: "var(--font-mono)",
-  fontSize: 11,
-  fill: "#dce7f7",
+  fontSize: 12.5,
+  fontWeight: 600,
+  fill: "#eaf2ff",
 } as const;
 
 const sub = {
   fontFamily: "var(--font-mono)",
-  fontSize: 9,
-  fill: "#8ba0be",
+  fontSize: 10.5,
+  fill: "var(--txt-dim)",
 } as const;
 
 const chipText = {
   fontFamily: "var(--font-mono)",
-  fontSize: 9.5,
+  fontSize: 10.5,
+  fontWeight: 600,
   fill: "var(--accent)",
 } as const;
 
@@ -79,7 +81,7 @@ export const GitOpsDiagram = () => (
 
     <rect x="60" y="274" width="300" height="42" rx="9" {...nodeStyle} />
     <text x="210" y="292" textAnchor="middle" {...title}>Ingress NGINX → AWS Load Balancer</text>
-    <text x="210" y="306" textAnchor="middle" {...sub}>99% uptime across 3+ services</text>
+    <text x="210" y="306" textAnchor="middle" {...sub}>health-checked across 3+ services</text>
   </svg>
 );
 

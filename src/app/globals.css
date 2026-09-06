@@ -12,8 +12,8 @@
   --line-soft: #131e33;
 
   --txt: #dce7f7;
-  --txt-dim: #8ba0be;
-  --txt-faint: #5d708f;
+  --txt-dim: #a9bcd8;
+  --txt-faint: #7e91b3;
 
   --accent: #5eead4;
   --accent-dim: rgba(94, 234, 212, 0.12);
@@ -129,6 +129,9 @@ section { padding-block: 88px; }
 .js-reveal .hero .reveal:nth-child(5) { animation-delay: 0.24s; }
 .js-reveal .hero .reveal:nth-child(6) { animation-delay: 0.3s; }
 .js-reveal .hero .reveal:nth-child(7) { animation-delay: 0.36s; }
+/* .stats moved out from under .hero-copy, so its nth-child position no
+   longer lines up with the intended stagger — pin its delay explicitly. */
+.js-reveal .hero .reveal.stats { animation-delay: 0.36s; }
 @keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,6 +181,8 @@ section { padding-block: 88px; }
   background: var(--accent-dim);
   font-size: 13px;
 }
+.logo span:last-child { white-space: nowrap; }
+@media (max-width: 900px) { .logo span:last-child { display: none; } }
 
 .nav-links { display: flex; align-items: center; gap: 6px; }
 .nav-links a {
@@ -282,6 +287,57 @@ section { padding-block: 88px; }
   justify-content: center;
   padding-block: calc(var(--nav-h) + 48px) 64px;
 }
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+@media (min-width: 981px) {
+  .hero-grid { grid-template-columns: 1.3fr 320px; gap: 56px; }
+}
+
+/* Portrait: pixel-dissolve reveal + duotone framing, see PixelPortrait.tsx */
+.portrait { width: min(100%, 300px); margin-inline: auto; cursor: pointer; }
+.portrait-frame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, var(--card-hi), var(--card));
+  padding: 14px;
+  isolation: isolate;
+  transition: transform 0.3s var(--ease), border-color 0.3s;
+}
+.portrait:hover .portrait-frame { transform: translateY(-3px); border-color: var(--accent-line); }
+.portrait-frame::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: 21px;
+  background: radial-gradient(120% 120% at 25% 0%, rgba(94, 234, 212, 0.2), transparent 62%);
+  pointer-events: none;
+}
+.portrait canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: var(--bg-soft);
+}
+.portrait-duotone {
+  filter: grayscale(0.85) brightness(0.94) contrast(1.1) sepia(0.35) hue-rotate(150deg) saturate(2.1);
+}
+.portrait .corner { position: absolute; width: 16px; height: 16px; pointer-events: none; }
+.portrait .corner-tl { top: 6px; left: 6px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.portrait .corner-tr { top: 6px; right: 6px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.portrait .corner-bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.portrait .corner-br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.portrait-caption {
+  margin-top: 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--txt-faint);
+}
+.portrait-caption b { color: var(--accent); font-weight: 600; }
+@media (max-width: 980px) { .portrait { width: min(60vw, 240px); } }
 .kicker {
   font-family: var(--font-mono);
   font-size: clamp(13px, 2.2vw, 15px);
@@ -312,7 +368,7 @@ section { padding-block: 88px; }
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin: 10px 0 0;
-  color: #5b7096;
+  color: #9db2d6;
   font-weight: 700;
 }
 .type-line { display: block; margin-top: 14px; font-size: clamp(17px, 3vw, 27px); color: var(--txt-dim); font-family: var(--font-mono); font-weight: 400; letter-spacing: -0.01em; }
@@ -474,6 +530,77 @@ section { padding-block: 88px; }
 }
 .proj-figure svg { width: 100%; height: auto; max-width: 420px; }
 
+.proj-figure-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.proj-figure-btn svg { transition: transform 0.3s var(--ease); }
+.proj-figure-btn:hover svg,
+.proj-figure-btn:focus-visible svg { transform: scale(1.035); }
+.proj-figure-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--txt-faint);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.proj-figure-btn:hover .proj-figure-hint,
+.proj-figure-btn:focus-visible .proj-figure-hint { opacity: 1; }
+
+.diagram-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background: rgba(3, 5, 12, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 32px;
+  animation: fade-in 0.2s ease both;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.diagram-modal-card {
+  position: relative;
+  width: min(680px, 100%);
+  border: 1px solid var(--accent-line);
+  border-radius: 18px;
+  background: linear-gradient(160deg, var(--card-hi), var(--card));
+  padding: 40px 36px 32px;
+  box-shadow: 0 40px 100px -40px #000;
+}
+.diagram-modal-card svg { width: 100%; height: auto; }
+.diagram-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(12, 20, 36, 0.85);
+  color: var(--txt-dim);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.diagram-modal-close:hover { color: var(--accent); border-color: var(--accent-line); }
+
 .repo-cta {
   display: flex;
   align-items: center;
@@ -623,6 +750,8 @@ footer a:hover { color: var(--accent); }
   .stats { grid-template-columns: 1fr 1fr; }
   .proj-body { padding: 24px 20px; }
   .hero-cta .btn { flex: 1 1 100%; justify-content: center; }
+  .diagram-modal { padding: 18px; }
+  .diagram-modal-card { padding: 32px 20px 24px; }
 }
 
 /* Print: give recruiters a sane paper version */

@@ -85,48 +85,6 @@ export const behaviors = `
   qsa('[data-drawer-link]').forEach(function (a) { a.addEventListener('click', function () { setDrawer(false); }); });
   d.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDrawer(false); });
 
-  /* ---------- experience tabs ---------- */
-  var tabs = qsa('[data-tab]');
-  var panels = qsa('[data-panel]');
-  var marker = d.getElementById('expMarker');
-  function moveMarker(tab) {
-    if (!marker || !tab) return;
-    if (window.matchMedia('(max-width: 820px)').matches) {
-      marker.style.top = '';
-      marker.style.width = tab.offsetWidth + 'px';
-      marker.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
-    } else {
-      marker.style.width = '2px';
-      marker.style.height = tab.offsetHeight + 'px';
-      marker.style.transform = 'translateY(' + tab.offsetTop + 'px)';
-    }
-  }
-  function select(id, focus) {
-    tabs.forEach(function (t) {
-      var on = t.getAttribute('data-tab') === id;
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;
-      if (on) { moveMarker(t); if (focus) t.focus(); }
-    });
-    panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== id; });
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { select(t.getAttribute('data-tab')); });
-    t.addEventListener('keydown', function (e) {
-      var n = null;
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
-      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
-      if (n) { e.preventDefault(); select(n.getAttribute('data-tab'), true); }
-    });
-  });
-  if (tabs.length) {
-    moveMarker(tabs[0]);
-    window.addEventListener('resize', function () {
-      var active = tabs.filter(function (t) { return t.getAttribute('aria-selected') === 'true'; })[0];
-      moveMarker(active || tabs[0]);
-    });
-  }
-
   /* ---------- typewriter ---------- */
   var tw = d.getElementById('tw');
   if (tw && !reduce) {

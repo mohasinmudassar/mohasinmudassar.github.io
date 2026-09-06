@@ -71,6 +71,15 @@ export const MenuIcon = ({ size = 20 }: P) => (
   </svg>
 );
 
+export const ExpandIcon = ({ size = 16 }: P) => (
+  <svg {...base(size)}>
+    <path d="M9 4H4v5" />
+    <path d="M15 4h5v5" />
+    <path d="M9 20H4v-5" />
+    <path d="M15 20h5v-5" />
+  </svg>
+);
+
 export const CloseIcon = ({ size = 20 }: P) => (
   <svg {...base(size)}>
     <path d="m6 6 12 12M18 6 6 18" />

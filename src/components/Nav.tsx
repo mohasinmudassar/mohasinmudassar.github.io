@@ -8,7 +8,7 @@ export default function Nav() {
         <div className="wrap">
           <a className="logo" href="#top" aria-label="Home">
             <span className="mark">MM</span>
-            <span>mohasin.dev</span>
+            <span>{site.name}</span>
           </a>
 
           <nav className="nav-links" aria-label="Primary">

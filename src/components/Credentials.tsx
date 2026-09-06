@@ -22,7 +22,7 @@ export default function Credentials() {
                     {c.issuer} · Earned {c.date}
                   </p>
                   <a href={c.url} target="_blank" rel="noreferrer">
-                    About this certification <ExternalIcon size={12} />
+                    Verify my certification <ExternalIcon size={12} />
                   </a>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { projects, site } from "@/data/content";
-import { Diagram } from "./Diagrams";
+import DiagramFigure from "./DiagramFigure";
 import { ArrowIcon, ExternalIcon, GitHubIcon } from "./Icons";
 
 export default function Projects() {
@@ -38,9 +38,7 @@ export default function Projects() {
                   </div>
                 )}
               </div>
-              <figure className="proj-figure">
-                <Diagram kind={p.diagram} />
-              </figure>
+              <DiagramFigure kind={p.diagram} label={p.title} />
             </article>
           ))}
 
