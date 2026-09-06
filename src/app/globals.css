@@ -411,6 +411,25 @@ section { padding-block: 88px; }
 .about-grid p strong { color: var(--txt); font-weight: 600; }
 .about-grid .accent { color: var(--accent); }
 
+.about-side { display: flex; flex-direction: column; gap: 20px; }
+
+.about-photo {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+  transition: border-color 0.3s, transform 0.3s var(--ease);
+}
+.about-photo:hover { border-color: var(--accent-line); transform: translateY(-3px); }
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top center;
+}
+
 .now-card {
   border: 1px solid var(--line);
   border-radius: var(--radius);
