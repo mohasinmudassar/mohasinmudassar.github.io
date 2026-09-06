@@ -8,7 +8,6 @@ export const site = {
   whatsapp: "https://wa.me/4915560494924",
   github: "https://github.com/mohasinmudassar",
   linkedin: "https://www.linkedin.com/in/mohasin-mudassar/",
-  medium: "https://medium.com/@mohasinmudassar16",
   resume: "/Mohasin-Mudassar-Resume.pdf",
   url: "https://mohasinmudassar.github.io",
   tagline:
@@ -222,9 +221,8 @@ export const education = [
 ];
 
 export const languages = [
-  { name: "English", level: "C1 — Professional proficiency", pct: 90 },
+  { name: "English", level: "Native", pct: 100 },
   { name: "German", level: "A2 — Conversational", pct: 40 },
-  { name: "Urdu", level: "Native", pct: 100 },
 ];
 
 export const nav = [

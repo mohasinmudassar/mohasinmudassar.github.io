@@ -54,7 +54,7 @@ const jsonLd = {
   email: `mailto:${site.email}`,
   url: site.url,
   address: { "@type": "PostalAddress", addressLocality: "Bamberg", addressCountry: "DE" },
-  sameAs: [site.github, site.linkedin, site.medium],
+  sameAs: [site.github, site.linkedin],
   knowsAbout: ["AWS", "Azure", "Terraform", "Kubernetes", "Argo CD", "GitOps", "CI/CD", "Observability"],
   alumniOf: [
     { "@type": "CollegeOrUniversity", name: "Otto-Friedrich-Universität Bamberg" },

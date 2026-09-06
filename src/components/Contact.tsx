@@ -1,5 +1,5 @@
 import { site } from "@/data/content";
-import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, MediumIcon, WhatsAppIcon } from "./Icons";
+import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, WhatsAppIcon } from "./Icons";
 
 export default function Contact() {
   return (
@@ -24,7 +24,6 @@ export default function Contact() {
         <div className="social-row reveal">
           <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub"><GitHubIcon size={19} /></a>
           <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedInIcon size={18} /></a>
-          <a href={site.medium} target="_blank" rel="noreferrer" aria-label="Medium"><MediumIcon size={19} /></a>
           <a href={site.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsAppIcon size={18} /></a>
           <a href={`mailto:${site.email}`} aria-label="Email"><MailIcon size={19} /></a>
         </div>

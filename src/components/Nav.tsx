@@ -1,5 +1,5 @@
 import { nav, site } from "@/data/content";
-import { DownloadIcon, MenuIcon, CloseIcon, GitHubIcon, LinkedInIcon, MediumIcon, MailIcon } from "./Icons";
+import { DownloadIcon, MenuIcon, CloseIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
 
 export default function Nav() {
   return (
@@ -46,7 +46,6 @@ export default function Nav() {
       <div className="rail rail-left" aria-hidden="false">
         <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub"><GitHubIcon size={19} /></a>
         <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedInIcon size={18} /></a>
-        <a href={site.medium} target="_blank" rel="noreferrer" aria-label="Medium"><MediumIcon size={19} /></a>
         <a href={`mailto:${site.email}`} aria-label="Email"><MailIcon size={19} /></a>
       </div>
 
