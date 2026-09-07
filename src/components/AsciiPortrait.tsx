@@ -9,10 +9,17 @@ import { useEffect, useRef, useState } from "react";
 const CHARS = " .:-=+*#%@".split("");
 const ACCENT = "94, 234, 212";
 const SCALE = 0.8; // fraction of the canvas the image is drawn into
-const REPEL_RADIUS_RATIO = 0.2; // fraction of canvas size
-const REPEL_FORCE = 4;
+const REPEL_RADIUS_RATIO = 0.22; // fraction of canvas size
+const REPEL_FORCE = 5;
 const MOUSE_EASE = 0.15;
 const ALPHA_MIN = 128; // 0-255 — cells below this are treated as background
+// Treats near-black pixels as background too, not just transparent ones —
+// keeps opaque source photos (e.g. a JPEG shot against a dark backdrop)
+// from spawning a particle for every pixel in the frame, which is what
+// actually caused the animation to feel laggy.
+const BRIGHTNESS_MIN = 0.06;
+const BURST_RADIUS_RATIO = 0.35;
+const BURST_FORCE = 14;
 
 type Particle = {
   x: number;
@@ -65,6 +72,7 @@ function buildParticles(img: HTMLImageElement, size: number): Particle[] {
       const g = data[i + 1];
       const b = data[i + 2];
       const brightness = (r + g + b) / (3 * 255);
+      if (brightness <= BRIGHTNESS_MIN) continue;
       const char = CHARS[Math.floor(brightness * (CHARS.length - 1))];
       const baseAlpha = 0.4 + brightness * 0.6;
 
@@ -232,6 +240,7 @@ export default function AsciiPortrait({ src, alt }: { src: string; alt: string }
         p.x += p.vx;
         p.y += p.vy;
 
+        if (p.currentAlpha <= 0.02) continue;
         ctx.fillStyle = `rgba(${ACCENT}, ${p.currentAlpha})`;
         ctx.fillText(p.char, p.x, p.y);
       }
@@ -260,9 +269,38 @@ export default function AsciiPortrait({ src, alt }: { src: string; alt: string }
       if (e.cancelable) e.preventDefault();
     };
 
+    // A one-off outward impulse on click/tap, on top of the continuous
+    // hover repel — gives the portrait a satisfying "poke" instead of only
+    // reacting while the pointer keeps moving.
+    const burst = (x: number, y: number) => {
+      const size = sizeRef.current;
+      const radius = size * BURST_RADIUS_RATIO;
+      for (const p of particlesRef.current) {
+        const dx = p.x - x;
+        const dy = p.y - y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist >= radius || dist <= 0) continue;
+        const force = (1 - dist / radius) * BURST_FORCE;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+      }
+    };
+    const handlePointerDown = (e: PointerEvent) => {
+      const p = toLocal(e.clientX, e.clientY);
+      burst(p.x, p.y);
+    };
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const p = toLocal(touch.clientX, touch.clientY);
+      burst(p.x, p.y);
+    };
+
     canvas.addEventListener("pointermove", handlePointerMove);
     canvas.addEventListener("pointerleave", handleLeave);
+    canvas.addEventListener("pointerdown", handlePointerDown);
     canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
     canvas.addEventListener("touchend", handleLeave);
 
     const io = new IntersectionObserver(
@@ -280,7 +318,9 @@ export default function AsciiPortrait({ src, alt }: { src: string; alt: string }
       io.disconnect();
       canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerleave", handleLeave);
+      canvas.removeEventListener("pointerdown", handlePointerDown);
       canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchstart", handleTouchStart);
       canvas.removeEventListener("touchend", handleLeave);
     };
   }, []);

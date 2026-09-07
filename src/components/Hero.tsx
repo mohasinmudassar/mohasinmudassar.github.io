@@ -43,7 +43,7 @@ export default function Hero() {
           </div>
 
           <div className="reveal">
-            <AsciiPortrait src="/portrait.png" alt={`${site.name} — ${site.role}`} />
+            <AsciiPortrait src="/hero.jpeg" alt={`${site.name} — ${site.role}`} />
           </div>
         </div>
 
