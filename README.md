@@ -1,9 +1,10 @@
-# mohasinmudassar.dev — personal site
+# mohasinmudassar.github.io — personal site
 
 Personal site for **Mohasin Mudassar**, Cloud & DevOps Engineer (Bamberg, Germany).
 
-Next.js 16 (App Router) → **static HTML export**. No database, no server, no paid
-services. It deploys for €0 on Vercel, GitHub Pages, Netlify or Cloudflare Pages.
+Next.js 16 (App Router) → **static HTML export**, deployed on GitHub Pages at
+**<https://mohasinmudassar.github.io/>** — the one URL used on the CV, LinkedIn
+and GitHub profile. No database, no server, no paid services.
 
 ## Quick start
 
@@ -39,13 +40,17 @@ Other files, if you need them:
   (`--accent` is the mint; change that one value to re-theme the site).
 - `src/components/Diagrams.tsx` — the two hand-drawn architecture SVGs.
   Add a new one and reference it from a project's `diagram` field.
-- `src/lib/behaviors.ts` — all client-side behaviour (typewriter, tabs, scroll
-  reveal, mobile menu) as one plain-JS script. No React state, so the exported
-  HTML works instantly, before any hydration.
+- `src/lib/behaviors.ts` — scroll reveals, language bars and navigation effects,
+  initialized after hydration by `SiteEffects.tsx`, with listener cleanup.
+- `src/components/Typewriter.tsx`, `MobileMenu.tsx`, `Modal.tsx` — the headline
+  animation and accessible dialogs. The initial HTML stays readable while JavaScript loads.
 - `public/Mohasin-Mudassar-Resume.pdf` — replace this file to update the
   "Download résumé" button. Keep the filename.
 - `src/app/layout.tsx` — page title, meta description, Open Graph tags and the
   JSON-LD structured data that Google reads.
+- `src/app/opengraph-image.png` — the 1200×630 picture LinkedIn/WhatsApp/Slack
+  show when the link is shared. Next.js wires it up automatically; replace the
+  file to update it (headshot + name + role on the site's dark background).
 
 ## Adding a project
 
@@ -64,4 +69,9 @@ Other files, if you need them:
 
 ## Deploying
 
-See **[DEPLOY.md](./DEPLOY.md)** — three free options, step by step.
+Run `npm run lint` and `npm run test:e2e` to check changes. Install the browser
+engines once with `npx playwright install chromium firefox webkit`. The E2E command
+builds and tests the static export in all three engines. The GitHub Pages workflow
+also runs lint and the Chromium regression suite before publishing.
+
+See **[DEPLOY.md](./DEPLOY.md)** for the GitHub Pages setup, step by step.

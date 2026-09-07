@@ -8,6 +8,7 @@ const W = 440;
 const H = 300;
 
 const LABELS = ["Downtime", "Misconfiguration", "OOMKilled", "Unused NAT Gateway", "Terraform Drift"];
+const SHORT_LABELS: Record<string, string> = { Misconfiguration: "Config", OOMKilled: "OOM", "Unused NAT Gateway": "Idle NAT", "Terraform Drift": "Drift" };
 const BUG_W = 46;
 const BUG_H = 22;
 const BUG_GAP = 16;
@@ -116,8 +117,10 @@ export default function DevOpsInvaders() {
     formationRef.current = { x: 0, y: 0, dir: 1 };
     particlesRef.current = [];
     statusRef.current = "playing";
+    keysRef.current = { left: false, right: false };
     setStatus("playing");
     setBugsAlive(LABELS.length);
+    canvasRef.current?.focus({ preventScroll: true });
   };
 
   useEffect(() => {
@@ -212,7 +215,7 @@ export default function DevOpsInvaders() {
         const by = BUG_TOP + formation.y;
         drawBug(ctx, bx, by);
         ctx.fillStyle = `rgba(${ORANGE}, 0.85)`;
-        ctx.fillText(bug.label, bx + BUG_W / 2, by - 9);
+        ctx.fillText(SHORT_LABELS[bug.label] ?? bug.label, bx + BUG_W / 2, by - 9);
       }
 
       if (statusRef.current !== "lose") drawShip(ctx, playerXRef.current, PLAYER_Y);
@@ -234,6 +237,8 @@ export default function DevOpsInvaders() {
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement !== canvas) return;
+      if (["ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") keysRef.current.left = true;
       if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") keysRef.current.right = true;
       if (e.key === " " || e.key === "Spacebar") {
@@ -246,6 +251,7 @@ export default function DevOpsInvaders() {
       if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") keysRef.current.right = false;
     };
     const onPointerDown = (e: PointerEvent) => {
+      canvas.focus({ preventScroll: true });
       draggingRef.current = true;
       playerXRef.current = Math.max(4, Math.min(W - PLAYER_W - 4, toLocalX(e.clientX)));
       fire();
@@ -257,10 +263,16 @@ export default function DevOpsInvaders() {
     const onPointerUp = () => {
       draggingRef.current = false;
     };
+    const onBlur = () => {
+      keysRef.current = { left: false, right: false };
+      draggingRef.current = false;
+    };
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
     canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("blur", onBlur);
+    canvas.addEventListener("pointercancel", onPointerUp);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
 
@@ -271,6 +283,8 @@ export default function DevOpsInvaders() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       canvas.removeEventListener("pointerdown", onPointerDown);
+      canvas.removeEventListener("blur", onBlur);
+      canvas.removeEventListener("pointercancel", onPointerUp);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
@@ -280,10 +294,10 @@ export default function DevOpsInvaders() {
     <div className="invaders" ref={wrapRef}>
       <div className="invaders-hud">
         <span>BUGS LEFT: {bugsAlive}/{LABELS.length}</span>
-        <span className="invaders-hint">← → / A D · SPACE or CLICK to fire</span>
+        <span className="invaders-hint"><span className="keyboard-hint">← → / A D · SPACE or CLICK to fire</span><span className="touch-hint">Drag to move · Tap to fire</span></span>
       </div>
       <div className="invaders-screen">
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} tabIndex={0} role="img" aria-label="DevOps Invaders. Move with left/right arrows or A/D and fire with Space. On touch screens, drag to move and tap to fire. Clear all five bugs to win." />
         {status === "win" && (
           <div className="invaders-overlay invaders-win">
             <p>DEPLOYS SUCCESSFUL!</p>

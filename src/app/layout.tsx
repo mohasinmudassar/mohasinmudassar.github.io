@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/data/content";
-import { behaviors } from "@/lib/behaviors";
+import SiteEffects from "@/components/SiteEffects";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  alternates: { canonical: site.url },
   title: `${site.name} — ${site.role}`,
   description:
     "Cloud & DevOps Engineer in Germany. AWS and Azure, Terraform, Kubernetes, Argo CD and GitOps. AWS Certified Solutions Architect – Associate.",
@@ -72,21 +73,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.documentElement.classList.add('js-reveal')`,
-          }}
-        />
         <noscript>
           {/* Without JS the reveal animation never fires — show everything. */}
-          <style>{`.reveal{opacity:1 !important;transform:none !important}.bar i{width:70% !important}`}</style>
+          <style>{`.exp-panel[hidden]{display:block}.exp-panel{margin-bottom:32px}.exp-tabs,.nav-toggle,.game-toggle{display:none !important}`}</style>
         </noscript>
       </head>
       <body>
         <div className="bg-layer" aria-hidden="true" />
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <script dangerouslySetInnerHTML={{ __html: behaviors }} />
+        <SiteEffects />
       </body>
     </html>
   );

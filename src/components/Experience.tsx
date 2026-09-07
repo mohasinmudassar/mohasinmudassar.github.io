@@ -37,7 +37,7 @@ export default function Experience() {
   };
 
   return (
-    <section id="experience">
+    <section id="experience" tabIndex={-1}>
       <div className="wrap">
         <h2 className="sec-head reveal">
           <span className="num">02.</span> Where I&rsquo;ve worked <span className="rule" />

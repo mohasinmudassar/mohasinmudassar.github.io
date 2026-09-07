@@ -1,10 +1,11 @@
 import { site, stats, typewriter } from "@/data/content";
 import { ArrowIcon, DownloadIcon } from "./Icons";
+import Typewriter from "./Typewriter";
 import AsciiPortrait from "./AsciiPortrait";
 
 export default function Hero() {
   return (
-    <section className="hero" id="top">
+    <section className="hero" id="top" tabIndex={-1}>
       <div className="wrap">
         <div className="hero-grid">
           <div className="hero-copy">
@@ -16,12 +17,7 @@ export default function Hero() {
             <h1 className="reveal" suppressHydrationWarning>Mohasin Mudassar.</h1>
             <h2 className="reveal" suppressHydrationWarning>
               I build things that run in production.
-              <span className="type-line">
-                <span className="tw" id="tw" data-words={JSON.stringify(typewriter)}>
-                  {typewriter[0]}
-                </span>
-                <span className="caret" />
-              </span>
+              <Typewriter words={typewriter} />
             </h2>
 
             <p className="lede reveal" suppressHydrationWarning>{site.tagline}</p>
@@ -38,7 +34,7 @@ export default function Hero() {
             <p className="hero-meta reveal" suppressHydrationWarning>
               <span>📍 {site.location}</span>
               <span>AWS Certified Solutions Architect – Associate</span>
-              <span>English C1 · German A2</span>
+              <span>English Native · German A2</span>
             </p>
           </div>
 

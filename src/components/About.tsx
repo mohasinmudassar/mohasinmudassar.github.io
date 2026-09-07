@@ -2,7 +2,7 @@ import { about, site } from "@/data/content";
 
 export default function About() {
   return (
-    <section id="about">
+    <section id="about" tabIndex={-1}>
       <div className="wrap">
         <h2 className="sec-head reveal">
           <span className="num">01.</span> About me <span className="rule" />

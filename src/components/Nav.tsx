@@ -1,6 +1,7 @@
 import { nav, site } from "@/data/content";
-import { DownloadIcon, MenuIcon, CloseIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
+import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
 import GameLauncher from "./GameLauncher";
+import MobileMenu from "./MobileMenu";
 
 export default function Nav() {
   return (
@@ -25,36 +26,19 @@ export default function Nav() {
             </a>
           </nav>
 
-          <button className="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
-            <span data-icon="open"><MenuIcon /></span>
-            <span data-icon="close" hidden><CloseIcon /></span>
-          </button>
+          <MobileMenu />
         </div>
       </header>
 
-      <div className="scrim" id="scrim" />
-      <aside className="drawer" id="drawer" aria-label="Mobile menu">
-        {nav.map((n) => (
-          <a key={n.href} href={n.href} data-drawer-link>
-            <span className="n">{n.num}.</span>
-            {n.label}
-          </a>
-        ))}
-        <GameLauncher className="game-toggle game-toggle-drawer" label="Play a game" />
-        <a className="btn" href={site.resume} download style={{ marginTop: 18, justifyContent: "center" }}>
-          <DownloadIcon /> Download résumé
-        </a>
-      </aside>
-
-      <div className="rail rail-left" aria-hidden="false">
+      <nav className="rail rail-left" aria-label="Social links">
         <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub"><GitHubIcon size={19} /></a>
         <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedInIcon size={18} /></a>
         <a href={`mailto:${site.email}`} aria-label="Email"><MailIcon size={19} /></a>
-      </div>
+      </nav>
 
-      <div className="rail rail-right">
+      <nav className="rail rail-right" aria-label="Email contact">
         <a className="mail" href={`mailto:${site.email}`}>{site.email}</a>
-      </div>
+      </nav>
     </>
   );
 }

@@ -3,7 +3,7 @@ import { AwsBadgeIcon, ExternalIcon } from "./Icons";
 
 export default function Credentials() {
   return (
-    <section id="credentials">
+    <section id="credentials" tabIndex={-1}>
       <div className="wrap">
         <h2 className="sec-head reveal">
           <span className="num">05.</span> Certifications &amp; education <span className="rule" />
@@ -37,7 +37,7 @@ export default function Credentials() {
                     <span>{l.level}</span>
                   </div>
                   <div className="bar">
-                    <i data-bar={l.pct} />
+                    <i data-bar={l.pct} style={{ width: `${l.pct}%` }} />
                   </div>
                 </div>
               ))}

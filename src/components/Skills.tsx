@@ -3,7 +3,7 @@ import { SkillIcon } from "./Icons";
 
 export default function Skills() {
   return (
-    <section id="skills">
+    <section id="skills" tabIndex={-1}>
       <div className="wrap">
         <h2 className="sec-head reveal">
           <span className="num">04.</span> What I work with <span className="rule" />

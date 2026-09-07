@@ -3,7 +3,7 @@ import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, WhatsAppIcon } from "
 
 export default function Contact() {
   return (
-    <section className="contact" id="contact">
+    <section className="contact" id="contact" tabIndex={-1}>
       <div className="wrap">
         <p className="num reveal">06. What&rsquo;s next</p>
         <h2 className="reveal">Get in touch</h2>

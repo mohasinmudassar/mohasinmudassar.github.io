@@ -4,7 +4,7 @@ import { ArrowIcon, ExternalIcon, GitHubIcon } from "./Icons";
 
 export default function Projects() {
   return (
-    <section id="projects">
+    <section id="projects" tabIndex={-1}>
       <div className="wrap">
         <h2 className="sec-head reveal">
           <span className="num">03.</span> Things I&rsquo;ve built <span className="rule" />
