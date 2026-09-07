@@ -9,12 +9,17 @@ const H = 300;
 
 const LABELS = ["Downtime", "Misconfiguration", "OOMKilled", "Unused NAT Gateway", "Terraform Drift"];
 const SHORT_LABELS: Record<string, string> = { Misconfiguration: "Config", OOMKilled: "OOM", "Unused NAT Gateway": "Idle NAT", "Terraform Drift": "Drift" };
-const MAX_BUGS_PER_WAVE = 7; // more than this and the formation no longer fits W with room to bounce
 const BUG_W = 46;
 const BUG_H = 22;
 const BUG_GAP = 16;
 const BUG_TOP = 40;
-const BUG_BOTTOM_LIMIT = H - 66; // formation reaching here = incident
+const BUG_BOTTOM_LIMIT = H - 66; // lowest alive row reaching here = incident
+const ROW_GAP = BUG_H + 14;
+const MAX_COLS = 7; // more than this and a row no longer fits W with room to bounce
+const MAX_ROWS = 5; // more than this and the bottom row starts past BUG_BOTTOM_LIMIT
+const MAX_WAVE_BUGS = MAX_COLS * MAX_ROWS;
+const BASE_WAVE_BUGS = 10; // wave 1 spawns roughly this many, across as many lines as it takes
+const WAVE_GROWTH = 1.5; // each wave brings ~50% more bugs than the last
 
 const PLAYER_W = 30;
 const PLAYER_H = 16;
@@ -31,20 +36,38 @@ const GREEN = "94, 234, 212"; // --accent
 const BLUE = "125, 211, 252"; // --sky
 const ORANGE = "255, 138, 61"; // neon orange, local to this feature
 
-type Bug = { label: string; baseX: number; alive: boolean };
+type Bug = { label: string; baseX: number; baseY: number; alive: boolean };
 type Bullet = { x: number; y: number };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string };
 type Status = "playing" | "lose";
 
+// ~50% more bugs than the last wave, with a little randomness so the exact
+// count varies run to run instead of following a rigid formula.
+function waveBugTarget(wave: number): number {
+  const grown = BASE_WAVE_BUGS * Math.pow(WAVE_GROWTH, wave - 1);
+  const jitter = Math.floor(Math.random() * 3) - 1; // -1, 0 or +1
+  return Math.max(4, Math.min(MAX_WAVE_BUGS, Math.round(grown) + jitter));
+}
+
 function spawnWave(wave: number): Bug[] {
-  const count = Math.min(LABELS.length + Math.floor((wave - 1) / 2), MAX_BUGS_PER_WAVE);
-  const total = count * BUG_W + (count - 1) * BUG_GAP;
+  const target = waveBugTarget(wave);
+  const rows = Math.min(MAX_ROWS, Math.max(1, Math.ceil(target / MAX_COLS)));
+  const cols = Math.min(MAX_COLS, Math.ceil(target / rows));
+  const total = cols * BUG_W + (cols - 1) * BUG_GAP;
   const startX = (W - total) / 2;
-  return Array.from({ length: count }, (_, i) => ({
-    label: LABELS[i % LABELS.length],
-    baseX: startX + i * (BUG_W + BUG_GAP),
-    alive: true,
-  }));
+
+  const bugs: Bug[] = [];
+  for (let r = 0; r < rows && bugs.length < target; r++) {
+    for (let c = 0; c < cols && bugs.length < target; c++) {
+      bugs.push({
+        label: LABELS[bugs.length % LABELS.length],
+        baseX: startX + c * (BUG_W + BUG_GAP),
+        baseY: r * ROW_GAP,
+        alive: true,
+      });
+    }
+  }
+  return bugs;
 }
 
 function drawBug(ctx: CanvasRenderingContext2D, x: number, y: number) {
@@ -85,14 +108,17 @@ export default function DevOpsInvaders() {
   const lastFireRef = useRef(0);
   const bulletsRef = useRef<Bullet[]>([]);
   const waveRef = useRef(1);
-  const bugsRef = useRef<Bug[]>(spawnWave(1));
+  // Wave 1's bug count is randomized (see waveBugTarget) — draw it once via
+  // useState's lazy initializer so the ref and the displayed count agree.
+  const [initialBugs] = useState(() => spawnWave(1));
+  const bugsRef = useRef<Bug[]>(initialBugs);
   const formationRef = useRef({ x: 0, y: 0, dir: 1 });
   const particlesRef = useRef<Particle[]>([]);
   const statusRef = useRef<Status>("playing");
   const starsRef = useRef<{ x: number; y: number; r: number }[]>([]);
 
   const [status, setStatus] = useState<Status>("playing");
-  const [bugsAlive, setBugsAlive] = useState(LABELS.length);
+  const [bugsAlive, setBugsAlive] = useState(initialBugs.length);
   const [wave, setWave] = useState(1);
   const [score, setScore] = useState(0);
 
@@ -165,7 +191,10 @@ export default function DevOpsInvaders() {
         const bugs = bugsRef.current;
         const alive = bugs.filter((b) => b.alive);
         const formation = formationRef.current;
-        const speed = 0.55 + (waveRef.current - 1) * 0.12 + (bugs.length - alive.length) * 0.22;
+        // Kill-ratio (not raw count) so the speed-up feels the same whether
+        // a wave has 10 bugs or 35 — plus a per-wave baseline ramp.
+        const killedFraction = bugs.length ? (bugs.length - alive.length) / bugs.length : 0;
+        const speed = 0.55 + (waveRef.current - 1) * 0.12 + killedFraction * 1.6;
         formation.x += formation.dir * speed;
         if (alive.length) {
           const left = Math.min(...alive.map((b) => b.baseX)) + formation.x;
@@ -176,7 +205,10 @@ export default function DevOpsInvaders() {
           }
         }
 
-        if (BUG_TOP + formation.y + BUG_H >= BUG_BOTTOM_LIMIT) {
+        // Only the lowest surviving row matters — clearing the front rows
+        // buys headroom even as the formation keeps descending.
+        const lowestAliveY = alive.length ? Math.max(...alive.map((b) => b.baseY)) : 0;
+        if (alive.length && BUG_TOP + formation.y + lowestAliveY + BUG_H >= BUG_BOTTOM_LIMIT) {
           statusRef.current = "lose";
           setStatus("lose");
         }
@@ -187,7 +219,7 @@ export default function DevOpsInvaders() {
           for (const bug of bugs) {
             if (!bug.alive) continue;
             const bx = bug.baseX + formation.x;
-            const by = BUG_TOP + formation.y;
+            const by = BUG_TOP + formation.y + bug.baseY;
             if (bullet.x > bx && bullet.x < bx + BUG_W && bullet.y > by && bullet.y < by + BUG_H) {
               bug.alive = false;
               spawnExplosion(bx + BUG_W / 2, by + BUG_H / 2);
@@ -228,7 +260,7 @@ export default function DevOpsInvaders() {
       for (const bug of bugsRef.current) {
         if (!bug.alive) continue;
         const bx = bug.baseX + formation.x;
-        const by = BUG_TOP + formation.y;
+        const by = BUG_TOP + formation.y + bug.baseY;
         drawBug(ctx, bx, by);
         ctx.fillStyle = `rgba(${ORANGE}, 0.85)`;
         ctx.fillText(SHORT_LABELS[bug.label] ?? bug.label, bx + BUG_W / 2, by - 9);
