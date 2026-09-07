@@ -9,6 +9,7 @@ const H = 300;
 
 const LABELS = ["Downtime", "Misconfiguration", "OOMKilled", "Unused NAT Gateway", "Terraform Drift"];
 const SHORT_LABELS: Record<string, string> = { Misconfiguration: "Config", OOMKilled: "OOM", "Unused NAT Gateway": "Idle NAT", "Terraform Drift": "Drift" };
+const MAX_BUGS_PER_WAVE = 7; // more than this and the formation no longer fits W with room to bounce
 const BUG_W = 46;
 const BUG_H = 22;
 const BUG_GAP = 16;
@@ -18,10 +19,13 @@ const BUG_BOTTOM_LIMIT = H - 66; // formation reaching here = incident
 const PLAYER_W = 30;
 const PLAYER_H = 16;
 const PLAYER_Y = H - 34;
-const PLAYER_SPEED = 4.4;
+const PLAYER_SPEED = 5.5;
 
-const BULLET_SPEED = 6.5;
-const FIRE_COOLDOWN = 260; // ms
+const BULLET_SPEED = 7.5;
+const FIRE_COOLDOWN = 200; // ms
+
+const KILL_SCORE = 10;
+const WAVE_CLEAR_BONUS = 50;
 
 const GREEN = "94, 234, 212"; // --accent
 const BLUE = "125, 211, 252"; // --sky
@@ -30,13 +34,14 @@ const ORANGE = "255, 138, 61"; // neon orange, local to this feature
 type Bug = { label: string; baseX: number; alive: boolean };
 type Bullet = { x: number; y: number };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string };
-type Status = "playing" | "win" | "lose";
+type Status = "playing" | "lose";
 
-function freshBugs(): Bug[] {
-  const total = LABELS.length * BUG_W + (LABELS.length - 1) * BUG_GAP;
+function spawnWave(wave: number): Bug[] {
+  const count = Math.min(LABELS.length + Math.floor((wave - 1) / 2), MAX_BUGS_PER_WAVE);
+  const total = count * BUG_W + (count - 1) * BUG_GAP;
   const startX = (W - total) / 2;
-  return LABELS.map((label, i) => ({
-    label,
+  return Array.from({ length: count }, (_, i) => ({
+    label: LABELS[i % LABELS.length],
     baseX: startX + i * (BUG_W + BUG_GAP),
     alive: true,
   }));
@@ -72,13 +77,15 @@ export default function DevOpsInvaders() {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const stepRef = useRef<() => void>(() => {});
 
   const playerXRef = useRef((W - PLAYER_W) / 2);
   const keysRef = useRef({ left: false, right: false });
   const draggingRef = useRef(false);
   const lastFireRef = useRef(0);
   const bulletsRef = useRef<Bullet[]>([]);
-  const bugsRef = useRef<Bug[]>(freshBugs());
+  const waveRef = useRef(1);
+  const bugsRef = useRef<Bug[]>(spawnWave(1));
   const formationRef = useRef({ x: 0, y: 0, dir: 1 });
   const particlesRef = useRef<Particle[]>([]);
   const statusRef = useRef<Status>("playing");
@@ -86,6 +93,8 @@ export default function DevOpsInvaders() {
 
   const [status, setStatus] = useState<Status>("playing");
   const [bugsAlive, setBugsAlive] = useState(LABELS.length);
+  const [wave, setWave] = useState(1);
+  const [score, setScore] = useState(0);
 
   const spawnExplosion = (x: number, y: number) => {
     for (let i = 0; i < 10; i++) {
@@ -113,14 +122,19 @@ export default function DevOpsInvaders() {
   const reset = () => {
     playerXRef.current = (W - PLAYER_W) / 2;
     bulletsRef.current = [];
-    bugsRef.current = freshBugs();
+    waveRef.current = 1;
+    bugsRef.current = spawnWave(1);
     formationRef.current = { x: 0, y: 0, dir: 1 };
     particlesRef.current = [];
     statusRef.current = "playing";
     keysRef.current = { left: false, right: false };
     setStatus("playing");
-    setBugsAlive(LABELS.length);
+    setBugsAlive(bugsRef.current.length);
+    setWave(1);
+    setScore(0);
     canvasRef.current?.focus({ preventScroll: true });
+    // The loop stops itself once the player dies — kick it back off.
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(stepRef.current);
   };
 
   useEffect(() => {
@@ -132,6 +146,8 @@ export default function DevOpsInvaders() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = "9px 'JetBrains Mono', ui-monospace, monospace";
+    ctx.textAlign = "center";
 
     starsRef.current = Array.from({ length: 34 }, () => ({
       x: Math.random() * W,
@@ -140,8 +156,6 @@ export default function DevOpsInvaders() {
     }));
 
     const step = () => {
-      rafRef.current = requestAnimationFrame(step);
-
       // ---- update ----
       if (statusRef.current === "playing") {
         if (keysRef.current.left) playerXRef.current -= PLAYER_SPEED;
@@ -151,7 +165,7 @@ export default function DevOpsInvaders() {
         const bugs = bugsRef.current;
         const alive = bugs.filter((b) => b.alive);
         const formation = formationRef.current;
-        const speed = 0.55 + (LABELS.length - alive.length) * 0.22;
+        const speed = 0.55 + (waveRef.current - 1) * 0.12 + (bugs.length - alive.length) * 0.22;
         formation.x += formation.dir * speed;
         if (alive.length) {
           const left = Math.min(...alive.map((b) => b.baseX)) + formation.x;
@@ -177,14 +191,18 @@ export default function DevOpsInvaders() {
             if (bullet.x > bx && bullet.x < bx + BUG_W && bullet.y > by && bullet.y < by + BUG_H) {
               bug.alive = false;
               spawnExplosion(bx + BUG_W / 2, by + BUG_H / 2);
-              setBugsAlive((n) => {
-                const next = n - 1;
-                if (next <= 0) {
-                  statusRef.current = "win";
-                  setStatus("win");
-                }
-                return next;
-              });
+              setScore((s) => s + KILL_SCORE);
+              const remaining = bugs.filter((b) => b.alive).length;
+              setBugsAlive(remaining);
+              if (remaining <= 0) {
+                const nextWave = waveRef.current + 1;
+                waveRef.current = nextWave;
+                setWave(nextWave);
+                setScore((s) => s + WAVE_CLEAR_BONUS);
+                bugsRef.current = spawnWave(nextWave);
+                formationRef.current = { x: 0, y: 0, dir: 1 };
+                setBugsAlive(bugsRef.current.length);
+              }
               return false;
             }
           }
@@ -207,8 +225,6 @@ export default function DevOpsInvaders() {
       for (const s of starsRef.current) ctx.fillRect(s.x, s.y, s.r, s.r);
 
       const formation = formationRef.current;
-      ctx.font = "9px 'JetBrains Mono', ui-monospace, monospace";
-      ctx.textAlign = "center";
       for (const bug of bugsRef.current) {
         if (!bug.alive) continue;
         const bx = bug.baseX + formation.x;
@@ -227,7 +243,12 @@ export default function DevOpsInvaders() {
         ctx.fillStyle = `rgba(${p.color}, ${Math.max(0, p.life)})`;
         ctx.fillRect(p.x, p.y, 3, 3);
       }
+
+      // Runs for as long as the player is alive; stops burning CPU/battery
+      // the moment they lose instead of rendering a frozen scene forever.
+      rafRef.current = statusRef.current === "playing" ? requestAnimationFrame(step) : null;
     };
+    stepRef.current = step;
 
     const toLocalX = (clientX: number) => {
       const rect = canvas.getBoundingClientRect();
@@ -293,24 +314,15 @@ export default function DevOpsInvaders() {
   return (
     <div className="invaders" ref={wrapRef}>
       <div className="invaders-hud">
-        <span>BUGS LEFT: {bugsAlive}/{LABELS.length}</span>
+        <span>SCORE {score} · WAVE {wave} · BUGS {bugsAlive}</span>
         <span className="invaders-hint"><span className="keyboard-hint">← → / A D · SPACE or CLICK to fire</span><span className="touch-hint">Drag to move · Tap to fire</span></span>
       </div>
       <div className="invaders-screen">
-        <canvas ref={canvasRef} tabIndex={0} role="img" aria-label="DevOps Invaders. Move with left/right arrows or A/D and fire with Space. On touch screens, drag to move and tap to fire. Clear all five bugs to win." />
-        {status === "win" && (
-          <div className="invaders-overlay invaders-win">
-            <p>DEPLOYS SUCCESSFUL!</p>
-            <p className="invaders-sub">100% SLO COMPLIANT</p>
-            <button type="button" className="btn btn-solid" onClick={reset}>
-              Deploy again
-            </button>
-          </div>
-        )}
+        <canvas ref={canvasRef} tabIndex={0} role="img" aria-label={`DevOps Invaders. Move with left/right arrows or A/D and fire with Space. On touch screens, drag to move and tap to fire. Bugs keep coming in waves — survive as long as you can. Current score ${score}.`} />
         {status === "lose" && (
           <div className="invaders-overlay invaders-lose">
             <p>INCIDENT DETECTED!</p>
-            <p className="invaders-sub">PagerDuty alert triggered</p>
+            <p className="invaders-sub">PagerDuty alert triggered — final score {score}, reached wave {wave}</p>
             <button type="button" className="btn btn-solid" onClick={reset}>
               Trigger rollback
             </button>

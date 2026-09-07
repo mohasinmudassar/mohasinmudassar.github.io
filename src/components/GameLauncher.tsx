@@ -22,7 +22,7 @@ export default function GameLauncher({ className, label }: { className?: string;
       </button>
 
       {open && (
-        <Modal label="DevOps Invaders" initialFocus="canvas" onClose={() => setOpen(false)}>
+        <Modal label="DevOps Invaders" className="diagram-modal invaders-modal" initialFocus="canvas" onClose={() => setOpen(false)}>
           <div className="diagram-modal-card invaders-card">
             <button type="button" className="diagram-modal-close" onClick={() => setOpen(false)} aria-label="Close">
               <CloseIcon size={18} />
