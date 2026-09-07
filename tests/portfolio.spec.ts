@@ -125,7 +125,7 @@ test("experience, resume and metadata remain valid", async ({ page, request }) =
   expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://mohasinmudassar.github.io/");
   const download = page.waitForEvent("download");
-  await page.locator(".hero-cta a[download]").click();
+  await page.locator(".contact-actions a[download]").click();
   expect((await download).suggestedFilename()).toBe("Mohasin-Mudassar-Resume.pdf");
 });
 
