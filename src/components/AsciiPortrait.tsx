@@ -335,7 +335,7 @@ export default function AsciiPortrait({ src, alt }: { src: string; alt: string }
   );
 }
 
-const NAME = "Mohasin Mudassar";
+const GREETING = "Hi, Mosh here.";
 
 function TypedName() {
   const [typed, setTyped] = useState("");
@@ -344,7 +344,7 @@ function TypedName() {
     let timer: ReturnType<typeof setTimeout>;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      timer = setTimeout(() => setTyped(NAME), 0);
+      timer = setTimeout(() => setTyped(GREETING), 0);
       return () => clearTimeout(timer);
     }
     let i = 0;
@@ -353,15 +353,15 @@ function TypedName() {
     const tick = () => {
       if (!deleting) {
         i++;
-        setTyped(NAME.slice(0, i));
-        if (i >= NAME.length) {
+        setTyped(GREETING.slice(0, i));
+        if (i >= GREETING.length) {
           deleting = true;
           timer = setTimeout(tick, 2200);
           return;
         }
       } else {
         i--;
-        setTyped(NAME.slice(0, i));
+        setTyped(GREETING.slice(0, i));
         if (i <= 0) {
           deleting = false;
           timer = setTimeout(tick, 500);
