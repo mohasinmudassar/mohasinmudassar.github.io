@@ -8,13 +8,13 @@ export default function Hero() {
       <div className="wrap">
         <div className="hero-grid">
           <div className="hero-copy">
-            <p className="kicker reveal">
+            <p className="kicker reveal" suppressHydrationWarning>
               <span className="dot" />
               Available for Cloud / DevOps roles in Germany
             </p>
 
-            <h1 className="reveal">Mohasin Mudassar.</h1>
-            <h2 className="reveal">
+            <h1 className="reveal" suppressHydrationWarning>Mohasin Mudassar.</h1>
+            <h2 className="reveal" suppressHydrationWarning>
               I build things that run in production.
               <span className="type-line">
                 <span className="tw" id="tw" data-words={JSON.stringify(typewriter)}>
@@ -24,9 +24,9 @@ export default function Hero() {
               </span>
             </h2>
 
-            <p className="lede reveal">{site.tagline}</p>
+            <p className="lede reveal" suppressHydrationWarning>{site.tagline}</p>
 
-            <div className="hero-cta reveal">
+            <div className="hero-cta reveal" suppressHydrationWarning>
               <a className="btn btn-solid" href="#projects">
                 See my work <ArrowIcon />
               </a>
@@ -35,19 +35,19 @@ export default function Hero() {
               </a>
             </div>
 
-            <p className="hero-meta reveal">
+            <p className="hero-meta reveal" suppressHydrationWarning>
               <span>📍 {site.location}</span>
               <span>AWS Certified Solutions Architect – Associate</span>
               <span>English C1 · German A2</span>
             </p>
           </div>
 
-          <div className="reveal">
+          <div className="reveal" suppressHydrationWarning>
             <AsciiPortrait src="/hero.jpeg" alt={`${site.name} — ${site.role}`} />
           </div>
         </div>
 
-        <div className="stats reveal">
+        <div className="stats reveal" suppressHydrationWarning>
           {stats.map((s) => (
             <div className="stat" key={s.label}>
               <b>{s.value}</b>
