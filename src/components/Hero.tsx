@@ -1,5 +1,5 @@
 import { site, stats, typewriter } from "@/data/content";
-import { ArrowIcon, DownloadIcon } from "./Icons";
+import { ArrowIcon, MailIcon } from "./Icons";
 import Typewriter from "./Typewriter";
 import AsciiPortrait from "./AsciiPortrait";
 
@@ -26,8 +26,8 @@ export default function Hero() {
               <a className="btn btn-solid" href="#projects">
                 See my work <ArrowIcon />
               </a>
-              <a className="btn btn-ghost" href={site.resume} download>
-                <DownloadIcon /> Download résumé
+              <a className="btn btn-ghost" href={`mailto:${site.email}`}>
+                <MailIcon size={16} /> Say hi
               </a>
             </div>
 
