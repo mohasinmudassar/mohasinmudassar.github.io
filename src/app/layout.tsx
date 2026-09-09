@@ -7,8 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   alternates: { canonical: site.url },
   title: `${site.name} — ${site.role}`,
-  description:
-    "Cloud & DevOps Engineer in Germany. AWS and Azure, Terraform, Kubernetes, Argo CD and GitOps. AWS Certified Solutions Architect – Associate.",
+  description: site.description,
   keywords: [
     "DevOps Engineer",
     "Cloud Engineer",
@@ -28,15 +27,14 @@ export const metadata: Metadata = {
     type: "website",
     url: site.url,
     title: `${site.name} — ${site.role}`,
-    description:
-      "3+ years building and operating cloud platforms on AWS and Azure with Terraform, Kubernetes and GitOps. Open to Cloud/DevOps roles in Germany.",
+    description: site.description,
     siteName: site.name,
     locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.name} — ${site.role}`,
-    description: "Cloud & DevOps Engineer — AWS, Terraform, Kubernetes, GitOps.",
+    description: site.description,
   },
   robots: { index: true, follow: true },
 };

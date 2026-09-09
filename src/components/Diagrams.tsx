@@ -86,41 +86,48 @@ export const GitOpsDiagram = () => (
 );
 
 export const CostOptDiagram = () => (
-  <svg viewBox="0 0 420 312" role="img" aria-label="Cost optimisation flow: EventBridge triggers a Python Lambda that scans EC2, ELB and NAT Gateway resources, reporting to CloudWatch and cutting monthly spend.">
+  <svg viewBox="0 0 420 416" role="img" aria-label="AWS idle governance flow: EventBridge triggers Lambda auditors that inspect EC2, load balancers and NAT gateways, record owned findings, notify people, and open a reviewed remediation pull request after a grace period.">
     <Defs />
 
-    <rect x="112" y="12" width="196" height="42" rx="9" {...nodeStyle} />
+    <rect x="112" y="12" width="196" height="42" rx="9" {...accentNode} />
     <text x="210" y="30" textAnchor="middle" {...title}>Amazon EventBridge</text>
-    <text x="210" y="44" textAnchor="middle" {...sub}>scheduled scan</text>
+    <text x="210" y="44" textAnchor="middle" {...sub}>daily governance schedule</text>
 
-    <Arrow d="M210 54 L 210 82" />
+    <Arrow d="M210 54 L 210 76" />
 
-    <rect x="112" y="86" width="196" height="42" rx="9" {...accentNode} />
-    <text x="210" y="104" textAnchor="middle" {...title}>AWS Lambda · Python</text>
-    <text x="210" y="118" textAnchor="middle" {...sub}>boto3 · least-privilege IAM</text>
+    <rect x="30" y="80" width="360" height="62" rx="11" {...nodeStyle} />
+    <text x="46" y="99" {...title}>Python Lambda auditors</text>
+    <text x="374" y="99" textAnchor="end" {...sub}>boto3 · least-privilege IAM</text>
+    <rect x="46" y="108" width="98" height="24" rx="6" {...accentNode} />
+    <text x="95" y="124" textAnchor="middle" {...chipText}>EC2</text>
+    <rect x="161" y="108" width="98" height="24" rx="6" {...accentNode} />
+    <text x="210" y="124" textAnchor="middle" {...chipText}>Load balancers</text>
+    <rect x="276" y="108" width="98" height="24" rx="6" {...accentNode} />
+    <text x="325" y="124" textAnchor="middle" {...chipText}>NAT gateways</text>
 
-    <Arrow d="M210 128 L 210 156" />
+    <Arrow d="M210 142 L 210 164" />
 
-    <rect x="14" y="160" width="392" height="70" rx="11" {...nodeStyle} />
-    <text x="30" y="178" {...title}>Account sweep</text>
-    <text x="390" y="178" textAnchor="end" {...sub}>idle / orphaned / untagged</text>
-    <rect x="30" y="188" width="112" height="30" rx="7" {...accentNode} />
-    <text x="86" y="207" textAnchor="middle" {...chipText}>idle EC2</text>
-    <rect x="154" y="188" width="112" height="30" rx="7" {...accentNode} />
-    <text x="210" y="207" textAnchor="middle" {...chipText}>orphaned ELB</text>
-    <rect x="278" y="188" width="112" height="30" rx="7" {...accentNode} />
-    <text x="334" y="207" textAnchor="middle" {...chipText}>unused NAT GW</text>
+    <rect x="30" y="168" width="360" height="50" rx="10" {...accentNode} />
+    <text x="46" y="188" {...title}>DynamoDB findings</text>
+    <text x="374" y="188" textAnchor="end" {...sub}>owner + metric evidence</text>
+    <text x="210" y="207" textAnchor="middle" {...chipText}>idle / low-traffic resources</text>
 
-    <Arrow d="M140 230 C 140 244, 120 246, 108 258" />
-    <Arrow d="M280 230 C 280 244, 300 246, 312 258" />
+    <Arrow d="M130 218 C 105 232, 105 240, 105 252" />
+    <Arrow d="M290 218 C 315 232, 315 240, 315 252" />
 
-    <rect x="16" y="262" width="188" height="42" rx="9" {...nodeStyle} />
-    <text x="110" y="280" textAnchor="middle" {...title}>CloudWatch report</text>
-    <text x="110" y="294" textAnchor="middle" {...sub}>+ notification</text>
+    <rect x="16" y="256" width="178" height="54" rx="9" {...nodeStyle} />
+    <text x="105" y="278" textAnchor="middle" {...title}>Owner notification</text>
+    <text x="105" y="296" textAnchor="middle" {...sub}>SES email + SNS digest</text>
 
-    <rect x="216" y="262" width="188" height="42" rx="9" {...accentNode} />
-    <text x="310" y="280" textAnchor="middle" {...title}>25–30% lower spend</text>
-    <text x="310" y="294" textAnchor="middle" {...sub}>month over month</text>
+    <rect x="226" y="256" width="178" height="54" rx="9" {...accentNode} />
+    <text x="315" y="278" textAnchor="middle" {...title}>Grace period</text>
+    <text x="315" y="296" textAnchor="middle" {...sub}>re-check stale=false</text>
+
+    <Arrow d="M315 310 L 315 334" />
+
+    <rect x="60" y="338" width="300" height="58" rx="10" {...accentNode} />
+    <text x="210" y="360" textAnchor="middle" {...title}>Terraform remediation PR</text>
+    <text x="210" y="378" textAnchor="middle" {...sub}>human review by default · delete is opt-in</text>
   </svg>
 );
 

@@ -1,7 +1,7 @@
 export const site = {
   name: "Mohasin Mudassar",
   shortName: "Mohasin",
-  role: "Cloud & DevOps Engineer",
+  role: "Platform & SRE Engineer",
   location: "Bamberg, Germany",
   email: "mohasin.mudassar.official@gmail.com",
   phone: "+49 155 60494924",
@@ -10,16 +10,18 @@ export const site = {
   linkedin: "https://www.linkedin.com/in/mohasin-mudassar/",
   resume: "/Mohasin-Mudassar-Resume.pdf",
   url: "https://mohasinmudassar.github.io",
+  description:
+    "Platform and Site Reliability Engineer in Germany building observable AWS and Azure platforms with Terraform, Kubernetes, GitOps, and pragmatic automation.",
   tagline:
-    "I build and operate cloud platforms on AWS and Azure — Terraform for the infrastructure, Kubernetes for the workloads, GitOps for everything in between.",
+    "I build reliable cloud platforms, instrument them so teams can see what is happening, and automate the path from infrastructure change to production.",
 };
 
 export const typewriter = [
-  "cloud platforms on AWS & Azure",
-  "Kubernetes clusters on EKS & AKS",
-  "GitOps pipelines with Argo CD",
+  "platforms teams can build on",
+  "reliable services with clear SLOs",
+  "monitoring that catches it early",
   "Terraform modules teams reuse",
-  "observability that catches it early",
+  "GitOps pipelines with Argo CD",
 ];
 
 export const stats = [
@@ -68,7 +70,7 @@ export const jobs: Job[] = [
     stack: ["AWS", "Azure", "Terraform", "Kubernetes", "Argo CD", "Datadog", "Keycloak"],
     bullets: [
       "Standardised AWS and Azure infrastructure with reusable Terraform modules for EC2, VPC, EKS and AKS across 10+ environments, cutting environment setup from hours to minutes.",
-      "Accelerated delivery with CI/CD automation in GitHub Actions, Jenkins and GitOps workflows on Argo CD — 35% shorter release cycles across 8+ environments.",
+      "Accelerated delivery with CI/CD automation in GitHub Actions, Jenkins and GitOps workflows on Argo CD 35% shorter release cycles across 8+ environments.",
       "Built observability with Datadog and Grafana, reducing detection time by 40% and MTTR by 25% through custom alerting and dashboards.",
       "Investigated 15+ production incidents across the deployment and infrastructure layers, driving RCA, mitigation and long-term reliability fixes.",
     ],
@@ -81,10 +83,10 @@ export const jobs: Job[] = [
     location: "Islamabad, Pakistan",
     stack: ["AWS", "Terraform", "ECS", "Datadog", "Cassandra", "Control Tower"],
     bullets: [
-      "Deployed and operated a production microservices platform (10+ services) on AWS with Terraform — EC2, RDS, Cognito, Route 53 and ECS — for repeatable infrastructure delivery.",
+      "Deployed and operated a production microservices platform (10+ services) on AWS with Terraform EC2, RDS, Cognito, Route 53 and ECS for repeatable infrastructure delivery.",
       "Engineered automated delivery pipelines with GitHub Actions and Jenkins supporting rolling and canary releases, shortening release cycles from 5 days to 3.",
       "Hit 99% SLO compliance with MTTA under 1 minute and MTTR under 1 hour by tuning Datadog, Sumo Logic and CloudWatch observability pipelines.",
-      "Cut unplanned downtime by automating Cassandra recovery, backup and maintenance workflows — manual recovery effort dropped from hours to minutes.",
+      "Cut unplanned downtime by automating Cassandra recovery, backup and maintenance workflows manual recovery effort dropped from hours to minutes.",
       "Hardened AWS security and governance with least-privilege IAM, S3 encryption, VPC segmentation and multi-account controls via AWS Organizations and Control Tower.",
     ],
   },
@@ -119,7 +121,7 @@ export const projects: Project[] = [
     title: "Kubernetes GitOps Platform on AWS EKS",
     tagline: "Terraform · Argo CD · Ingress NGINX",
     problem:
-      "I took AWS's open-source retail-store sample app — a realistic multi-service workload — as the payload and built the platform around it: the kind of environment that normally takes hours of manual console work to stand up, with no way to tell from Git what was actually running in the cluster.",
+      "I took AWS's open-source retail-store sample app a realistic multi-service workload as the payload and built the platform around it: the kind of environment that normally takes hours of manual console work to stand up, with no way to tell from Git what was actually running in the cluster.",
     bullets: [
       "My contribution was the infrastructure layer, not the sample app's services: the EKS cluster, networking and IAM are entirely mine, provisioned in Terraform and dropping environment setup from hours to under 30 minutes.",
       "Moved deployments to a GitOps model with Argo CD, so the Git repo is the source of truth and a rollback is a git revert, not a manual kubectl fix under pressure.",
@@ -130,17 +132,17 @@ export const projects: Project[] = [
     diagram: "gitops",
   },
   {
-    title: "Automated AWS Cost Optimization System",
-    tagline: "Python · AWS Lambda · CloudWatch",
+    title: "AWS Idle Governance",
+    tagline: "Python · AWS Lambda · Terraform · CloudWatch",
     problem:
-      "Idle EC2 instances, orphaned load balancers and forgotten NAT Gateways were quietly burning budget every month, and nobody owned finding them.",
+      "Idle EC2 instances, load balancers and NAT gateways are easy to detect but hard to remediate safely. This governance workflow connects detection to ownership, notification and a reviewable change.",
     bullets: [
-      "Built a serverless Python + Lambda service that scans accounts on a schedule for idle EC2, unattached EBS volumes, target-less load balancers and unused NAT Gateways.",
-      "Resources are flagged and reported via SNS first, not deleted outright — teams get a grace period to tag anything that should be excluded before cleanup runs.",
-      "Paired with a tagging standard (owner, team, environment) for accountability, this cut monthly AWS spend by roughly 25–30%, measured through AWS Cost Explorer across several billing cycles.",
+      "Built scheduled Python Lambda auditors for EC2, load balancers and NAT gateways, using CloudWatch metrics plus tags or CloudTrail to resolve ownership.",
+      "Stores findings in DynamoDB and notifies the owner through SES while sending operations a daily SNS digest, creating an accountable trail instead of a noisy alert.",
+      "Waits through a configurable grace period, then re-checks the stale=false opt-out before opening a Terraform pull request by default; direct deletion is an explicit mode.",
     ],
-    stack: ["Python", "AWS Lambda", "CloudWatch", "Boto3", "IAM", "EventBridge", "SNS"],
-    repo: "https://github.com/mohasinmudassar/Automated-AWS-Cost-Optimization-System",
+    stack: ["Python", "AWS Lambda", "Terraform", "DynamoDB", "CloudWatch", "SES / SNS", "GitHub API"],
+    repo: "https://github.com/mohasinmudassar/aws-idle-governance",
     diagram: "costopt",
   },
 ];

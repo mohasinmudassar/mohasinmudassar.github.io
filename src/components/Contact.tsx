@@ -8,7 +8,7 @@ export default function Contact() {
         <p className="num reveal">06. What&rsquo;s next</p>
         <h2 className="reveal">Get in touch</h2>
         <p className="reveal">
-          I&rsquo;m looking for a full-time Cloud / DevOps role in Germany and I read every message.
+          I&rsquo;m looking for a full-time Platform Engineer or Site Reliability Engineer role in Germany and I read every message.
           Hiring, collaborating, or just want to talk Terraform — my inbox is open.
         </p>
 

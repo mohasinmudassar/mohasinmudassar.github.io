@@ -47,7 +47,7 @@ export default function Projects() {
               <h3>More on GitHub</h3>
               <p>Terraform modules, pipeline experiments, Kubernetes manifests and scripts I keep sharpening.</p>
             </div>
-            <a className="btn" href={site.github} target="_blank" rel="noreferrer">
+            <a className="btn" href="https://github.com/mohasinmudassar?tab=repositories" target="_blank" rel="noreferrer">
               <GitHubIcon size={16} /> Browse repositories <ArrowIcon size={15} />
             </a>
           </div>

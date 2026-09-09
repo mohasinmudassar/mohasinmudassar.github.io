@@ -11,7 +11,7 @@ export default function Hero() {
           <div className="hero-copy">
             <p className="kicker reveal" suppressHydrationWarning>
               <span className="dot" />
-              Available for Cloud / DevOps roles in Germany
+              Available for Platform Engineer / Site Reliability Engineer roles in Germany
             </p>
 
             <h1 className="reveal" suppressHydrationWarning>Mohasin Mudassar.</h1>

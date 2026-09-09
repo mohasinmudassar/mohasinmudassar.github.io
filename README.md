@@ -1,6 +1,6 @@
 # mohasinmudassar.github.io — personal site
 
-Personal site for **Mohasin Mudassar**, Cloud & DevOps Engineer (Bamberg, Germany).
+Personal site for **Mohasin Mudassar**, Cloud & DevOps Engineer (Germany).
 
 Next.js 16 (App Router) → **static HTML export**, deployed on GitHub Pages at
 **<https://mohasinmudassar.github.io/>** — the one URL used on the CV, LinkedIn

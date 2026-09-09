@@ -107,7 +107,7 @@ test("narrow layouts and animated headlines stay stable", async ({ page }) => {
   });
   const before = await page.locator(".hero-cta").boundingBox();
   // Exercise the longest phrase and an empty phrase without waiting for a whole cycle.
-  for (const phrase of ["observability that catches it early", ""]) {
+  for (const phrase of ["monitoring that catches it early", ""]) {
     await page.locator("#tw").evaluate((element, text) => { element.textContent = text; }, phrase);
     const after = await page.locator(".hero-cta").boundingBox();
     expect(after!.y).toBeCloseTo(before!.y, 0);
