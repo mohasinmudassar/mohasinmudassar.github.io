@@ -33,7 +33,7 @@ export const stats = [
 
 export const about = {
   paragraphs: [
-    "I'm a Platform and DevOps Engineer based in Bamberg, Germany, with 3+ years of experience building and running production platforms on AWS and Azure. Most of my work sits where infrastructure, automation and reliability meet: writing the Terraform that provisions an environment, the pipeline that ships to it, and the monitoring that tells you when something is wrong before a customer does.",
+    "I'm a Platform and DevOps Engineer based in Germany, with 3+ years of experience building and running production platforms on AWS and Azure. Most of my work sits where infrastructure, automation and reliability meet: writing the Terraform that provisions an environment, the pipeline that ships to it, and the monitoring that tells you when something is wrong before a customer does.",
     "I've worked directly with customers to design cloud architectures, migrated deployments onto Kubernetes with rolling and blue-green rollouts, and cut release cycle times by standardising CI/CD across teams. I care about least-privilege by default, runbooks that someone can actually follow at 3am, and post-incident reviews that change something.",
     "I'm also an AI enthusiast exploring how intelligent developer tools, automation and observability can help engineering teams move faster without compromising reliability. Right now I'm finishing a Master's in International Software Systems Science at the University of Bamberg while looking for my next full-time Platform Engineer or DevOps Engineer role in Germany, ideally with an English-speaking engineering team.",
   ],

@@ -9,7 +9,7 @@ export default function Contact() {
         <h2 className="reveal">Get in touch</h2>
         <p className="reveal">
           I&rsquo;m looking for a full-time Platform Engineer or Site Reliability Engineer role in Germany and I read every message.
-          Hiring, collaborating, or want to talk about Terraform, AI-assisted developer tooling, or reliable production systems — my inbox is open.
+          Hiring, collaborating, or want to talk about cloud infrastructure, AI-assisted developer tooling, or reliable production systems — my inbox is open.
         </p>
 
         <div className="contact-actions reveal">

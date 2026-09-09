@@ -1,5 +1,5 @@
 import { nav, site } from "@/data/content";
-import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
+import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "./Icons";
 import GameLauncher from "./GameLauncher";
 import MobileMenu from "./MobileMenu";
 
@@ -31,6 +31,7 @@ export default function Nav() {
       </header>
 
       <nav className="rail rail-left" aria-label="Social links">
+        <a href={`tel:${site.phone.replace(/\s/g, "")}`} aria-label={`Call ${site.phone}`}><PhoneIcon size={19} /></a>
         <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub"><GitHubIcon size={19} /></a>
         <a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedInIcon size={18} /></a>
         <a href={`mailto:${site.email}`} aria-label="Email"><MailIcon size={19} /></a>
