@@ -30,7 +30,7 @@ export default function About() {
                 ))}
               </div>
               <p className="availability">
-                <b>Open to work</b> — full-time Platform Engineer / Site Reliability Engineer roles in Germany,
+                <b>Open to work</b> — full-time Platform Engineer / DevOps Engineer roles in Germany,
                 English-speaking teams welcome. Reach me at{" "}
                 <a href={`mailto:${site.email}`} style={{ color: "var(--accent)" }}>
                   {site.email}

@@ -1,4 +1,4 @@
-import { projects, site } from "@/data/content";
+import { projects } from "@/data/content";
 import DiagramFigure from "./DiagramFigure";
 import { ArrowIcon, ExternalIcon, GitHubIcon } from "./Icons";
 
